@@ -1,0 +1,7 @@
+---
+- name: Monitoring infra 101
+  hosts: meta-type_node-exporter
+  remote_user: ubuntu
+  become: true
+  roles:
+    - appserver

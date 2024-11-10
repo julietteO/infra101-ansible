@@ -1,0 +1,12 @@
+clouds:
+  openstack:
+    auth:
+      auth_url:
+      project_name:
+      project_id:
+      user_domain_name:
+      username:
+      password:
+    region_name:
+    interface:
+    identity_api_version:
