@@ -1,0 +1,50 @@
+---
+- name: Install gpg
+  apt:
+    name: gnupg,software-properties-common
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Add gpg hey
+  apt_key:
+    url: "https://packages.grafana.com/gpg.key"
+    validate_certs: no
+
+- name: Add repository
+  apt_repository:
+    repo: "deb https://packages.grafana.com/oss/deb stable main"
+    state: present
+    validate_certs: no
+
+- name: Install grafana
+  apt:
+    name: grafana
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Start grafana-server
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+
+- name: Add prometheus datasource
+  grafana_datasource:
+    name: "prometheus"
+    grafana_url: "http://127.0.0.1:3000"
+    grafana_user: "{{ grafana_admin_user }}"
+    grafana_password: "{{ grafana_admin_password }}"
+    org_id: "1"
+    ds_type: "prometheus"
+    ds_url: "http://{{ hostvars[groups['meta-type_prometheus'][0]]['ansible_host'] }}:9090"
+  changed_when: false
+
+- name: Import grafana dashboard
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://127.0.0.1:3000"
+    url_username: "{{ grafana_admin_user }}"
+    url_password: "{{ grafana_admin_password }}"
+    dashboard_id: 1860
+    overwrite: true

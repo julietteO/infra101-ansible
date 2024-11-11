@@ -1,0 +1,6 @@
+---
+# handlers file for roles/prometheusserver
+- name: reload_prometheus
+  systemd:
+    name: prometheus
+    state: restarted

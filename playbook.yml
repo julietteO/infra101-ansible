@@ -1,7 +1,24 @@
 ---
-- name: Monitoring infra 101
+- name: Install node exporter
   hosts: meta-type_node-exporter
   remote_user: ubuntu
   become: true
+  tags: ["app"]
   roles:
     - appserver
+
+- name: Install prometheus
+  hosts: meta-type_prometheus
+  remote_user: ubuntu
+  become: true
+  tags: ["prom"]
+  roles:
+    - prometheusserver
+
+- name: Install grafana
+  hosts: meta-type_grafana
+  remote_user: ubuntu
+  become: true
+  tags: ["grafana"]
+  roles:
+    - grafanaserver
